@@ -75,6 +75,8 @@ npx playwright test --project=webkit
 
 ```
 zentist/
+├── config/
+│   └── credentials.ts
 ├── pages/           # Page Object Model - page logic
 │   ├── MainPage.ts
 │   ├── LoginPage.ts
@@ -106,6 +108,30 @@ zentist/
 - Assert page has title and content
 - Assert page has "Logout" button
 - Logout and assert user is logged out
+
+## Credentials
+
+Credentials are loaded from environment variables. Create a `.env` file (not committed) with:
+
+| Variable      | Description           | Default                  |
+|---------------|-----------------------|--------------------------|
+| BASE_URL      | Application base URL   | https://the-internet.herokuapp.com |
+| LOGIN_USERNAME| Login username        | tomsmith                 |
+| LOGIN_PASSWORD| Login password        | SuperSecretPassword!     |
+
+Tests use defaults when variables are unset, so `.env` is optional for the demo site.
+
+### GitHub Actions
+
+Add variables in **Settings → Secrets and variables → Actions**:
+
+| Type   | Name           | Description                    |
+|--------|----------------|--------------------------------|
+| Secret | LOGIN_USERNAME | Login username (use Secrets)   |
+| Secret | LOGIN_PASSWORD | Login password (use Secrets)  |
+| Variable | BASE_URL     | Base URL (optional, uses Variables) |
+
+The workflow falls back to demo values when secrets are unset.
 
 ## Test Data
 
