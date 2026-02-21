@@ -1,10 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Environment-dependent base URL.
- * Set BASE_URL env variable to run tests against a different environment.
- * Example: BASE_URL=https://staging.example.com npm test
- */
 const baseURL = process.env.BASE_URL || 'https://the-internet.herokuapp.com';
 
 export default defineConfig({
