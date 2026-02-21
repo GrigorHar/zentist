@@ -111,31 +111,26 @@ zentist/
 
 ## Credentials
 
-Credentials are loaded from environment variables. Create a `.env` file (not committed) with:
+Credentials are loaded from environment variables only. Create a `.env` file (not committed) with:
 
-| Variable      | Description           | Default                  |
-|---------------|-----------------------|--------------------------|
-| BASE_URL      | Application base URL   | https://the-internet.herokuapp.com |
-| LOGIN_USERNAME| Login username        | tomsmith                 |
-| LOGIN_PASSWORD| Login password        | SuperSecretPassword!     |
-
-Tests use defaults when variables are unset, so `.env` is optional for the demo site.
+| Variable      | Description             | Required |
+|---------------|-------------------------|----------|
+| BASE_URL      | Application base URL    | No (default: the-internet.herokuapp.com) |
+| LOGIN_USERNAME| Login username          | Yes      |
+| LOGIN_PASSWORD| Login password          | Yes      |
 
 ### GitHub Actions
 
-Add variables in **Settings → Secrets and variables → Actions**:
+Add in **Settings → Secrets and variables → Actions**:
 
-| Type   | Name           | Description                    |
-|--------|----------------|--------------------------------|
-| Secret | LOGIN_USERNAME | Login username (use Secrets)   |
-| Secret | LOGIN_PASSWORD | Login password (use Secrets)  |
-| Variable | BASE_URL     | Base URL (optional, uses Variables) |
-
-The workflow falls back to demo values when secrets are unset.
+| Type     | Name           |
+|----------|----------------|
+| Secret   | LOGIN_USERNAME |
+| Secret   | LOGIN_PASSWORD |
+| Variable | BASE_URL (optional) |
 
 ## Test Data
 
-| Username | Password             | Result  |
-|----------|----------------------|---------|
-| tomsmith | SuperSecretPassword! | Valid   |
-| (any other) | (any other)       | Invalid |
+| Valid credentials | Invalid            |
+|-------------------|--------------------|
+| Set via env vars  | Any other values   |
