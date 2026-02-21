@@ -6,6 +6,35 @@ on:
   pull_request:
     branches: [main, master]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - feature/playwright-qa-automation
+      browser:
+        description: 'Browser to run tests on'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - chromium
+          - firefox
+          - webkit
+      spec:
+        description: 'Test spec to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - tests/main-page.spec.ts
+          - tests/login-invalid-credentials.spec.ts
+          - tests/login-valid.spec.ts
 
 jobs:
   test:
@@ -13,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || github.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,7 +57,16 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npm test
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            CMD="npx playwright test"
+            [ "${{ github.event.inputs.browser }}" != "" ] && [ "${{ github.event.inputs.browser }}" != "all" ] && CMD="$CMD --project=${{ github.event.inputs.browser }}"
+            [ "${{ github.event.inputs.spec }}" != "" ] && [ "${{ github.event.inputs.spec }}" != "all" ] && CMD="$CMD ${{ github.event.inputs.spec }}"
+            eval $CMD
+          else
+            npm test
+          fi
         env:
           CI: true
 
