@@ -1,9 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { SecurePage } from '../pages/SecurePage';
-
-const VALID_USERNAME = 'tomsmith';
-const VALID_PASSWORD = 'SuperSecretPassword!';
+import { credentials } from '../config/credentials';
 
 test.describe('Scenario 3 - Login to the site', () => {
   let loginPage: LoginPage;
@@ -16,7 +14,7 @@ test.describe('Scenario 3 - Login to the site', () => {
   });
 
   test('Login with valid credentials - full flow', async ({ page }) => {
-    await loginPage.login(VALID_USERNAME, VALID_PASSWORD);
+    await loginPage.login(credentials.username, credentials.password);
 
     await expect(page).toHaveURL(/\/secure/);
 
