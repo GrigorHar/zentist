@@ -1,4 +1,8 @@
-import 'dotenv/config';
+import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
 import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.BASE_URL || 'https://the-internet.herokuapp.com';
