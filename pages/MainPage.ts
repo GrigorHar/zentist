@@ -23,7 +23,6 @@ export class MainPage {
     return this.page.locator('a[href]');
   }
 
-  /** Links within main content area (excludes fork ribbon, footer) */
   getContentLinks() {
     return this.page.locator('#content a[href]');
   }
