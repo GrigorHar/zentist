@@ -14,6 +14,9 @@ test.describe('Scenario 3 - Login to the site', () => {
   });
 
   test('Login with valid credentials - full flow', async ({ page }) => {
+    if (!credentials.username || !credentials.password) {
+      throw new Error('LOGIN_USERNAME and LOGIN_PASSWORD must be set in .env');
+    }
     await loginPage.login(credentials.username, credentials.password);
 
     await expect(page).toHaveURL(/\/secure/);

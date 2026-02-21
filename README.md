@@ -14,6 +14,8 @@ npm install
 npx playwright install
 ```
 
+**Required:** Create a `.env` file in the project root with `BASE_URL`, `LOGIN_USERNAME`, and `LOGIN_PASSWORD` before running tests (see [Credentials](#credentials)).
+
 ## Running Tests
 
 ### Run all tests
@@ -103,7 +105,7 @@ zentist/
 - 14 test cases covering: empty credentials, wrong username/password, case sensitivity, SQL injection, special characters, whitespace, and similar-but-wrong passwords
 
 ### Scenario 3 - Login to the site
-- Login with valid credentials (tomsmith / SuperSecretPassword!)
+- Login with valid credentials (from `.env`)
 - Assert user is on /secure page
 - Assert page has title and content
 - Assert page has "Logout" button
@@ -111,13 +113,15 @@ zentist/
 
 ## Credentials
 
-Credentials are loaded from environment variables only. Create a `.env` file (not committed) with:
+**You must create a `.env` file** in the project root to run tests. All values are loaded from environment variables only (`.env` is not committed).
 
 | Variable      | Description             | Required |
 |---------------|-------------------------|----------|
 | BASE_URL      | Application base URL    | No (default: the-internet.herokuapp.com) |
-| LOGIN_USERNAME| Login username          | Yes      |
-| LOGIN_PASSWORD| Login password          | Yes      |
+| LOGIN_USERNAME| Login username          | **Yes**  |
+| LOGIN_PASSWORD| Login password          | **Yes**  |
+
+Without `.env`, the login test will fail. Set `LOGIN_USERNAME`, `LOGIN_PASSWORD`, and optionally `BASE_URL` in your `.env` file.
 
 ### GitHub Actions
 
