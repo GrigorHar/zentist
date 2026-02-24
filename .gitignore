@@ -1,5 +1,8 @@
-node_modules/
-dist/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+venv/
 playwright-report/
 test-results/
 playwright/.cache/
