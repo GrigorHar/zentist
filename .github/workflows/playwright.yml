@@ -32,9 +32,9 @@ on:
         type: choice
         options:
           - all
-          - tests/main-page.spec.ts
-          - tests/login-invalid-credentials.spec.ts
-          - tests/login-valid.spec.ts
+          - tests/test_main_page.py
+          - tests/test_login_invalid_credentials.py
+          - tests/test_login_valid.py
 
 jobs:
   test:
@@ -45,27 +45,26 @@ jobs:
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || github.ref }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '20'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps
 
       - name: Run Playwright tests
         run: |
-          set -e
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            CMD="npx playwright test"
-            [ "${{ github.event.inputs.browser }}" != "" ] && [ "${{ github.event.inputs.browser }}" != "all" ] && CMD="$CMD --project=${{ github.event.inputs.browser }}"
+            CMD="python -m pytest"
+            [ "${{ github.event.inputs.browser }}" != "" ] && [ "${{ github.event.inputs.browser }}" != "all" ] && CMD="$CMD --browser ${{ github.event.inputs.browser }}"
             [ "${{ github.event.inputs.spec }}" != "" ] && [ "${{ github.event.inputs.spec }}" != "all" ] && CMD="$CMD ${{ github.event.inputs.spec }}"
             eval $CMD
           else
-            npm test
+            python -m pytest
           fi
         env:
           CI: true
