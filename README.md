@@ -1,17 +1,17 @@
 # Zentist - QA Automation
 
-Playwright + pytest automation test suite for [The Internet](https://the-internet.herokuapp.com).
+Playwright-based QA automation test suite for [The Internet](https://the-internet.herokuapp.com).
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- pip
+- Node.js 18 or higher
+- npm
 
 ## Installation
 
 ```bash
-pip install -r requirements.txt
-python -m playwright install
+npm install
+npx playwright install
 ```
 
 **Required:** Create a `.env` file in the project root with `BASE_URL`, `LOGIN_USERNAME`, and `LOGIN_PASSWORD` before running tests (see [Credentials](#credentials)).
@@ -21,44 +21,56 @@ python -m playwright install
 ### Run all tests
 
 ```bash
-python -m pytest
+npm test
 ```
 
 ### Run tests in headed mode (see browser)
 
 ```bash
-python -m pytest --headed
+npm run test:headed
+```
+
+### Run tests with UI
+
+```bash
+npm run test:ui
+```
+
+### Run tests in debug mode
+
+```bash
+npm run test:debug
 ```
 
 ### Run tests against a different environment
 
-Set the `BASE_URL` environment variable:
+Set the `BASE_URL` environment variable to run tests against any other URL:
 
 ```bash
 # Windows (PowerShell)
-$env:BASE_URL="https://staging.example.com"; python -m pytest
+$env:BASE_URL="https://staging.example.com"; npm test
 
 # Windows (CMD)
-set BASE_URL=https://staging.example.com && python -m pytest
+set BASE_URL=https://staging.example.com && npm test
 
 # Linux / macOS
-BASE_URL=https://staging.example.com python -m pytest
+BASE_URL=https://staging.example.com npm test
 ```
 
 ### Run specific test file
 
 ```bash
-python -m pytest tests/test_main_page.py
-python -m pytest tests/test_login_invalid_credentials.py
-python -m pytest tests/test_login_valid.py
+npx playwright test tests/main-page.spec.ts
+npx playwright test tests/login-invalid-credentials.spec.ts
+npx playwright test tests/login-valid.spec.ts
 ```
 
-### Run specific browser
+### Run specific project (browser)
 
 ```bash
-python -m pytest --browser chromium
-python -m pytest --browser firefox
-python -m pytest --browser webkit
+npx playwright test --project=chromium
+npx playwright test --project=firefox
+npx playwright test --project=webkit
 ```
 
 ## Project Structure
@@ -66,17 +78,17 @@ python -m pytest --browser webkit
 ```
 zentist/
 ├── config/
-│   └── credentials.py
-├── pages/
-│   ├── main_page.py
-│   ├── login_page.py
-│   └── secure_page.py
-├── tests/
-│   ├── test_main_page.py
-│   ├── test_login_invalid_credentials.py
-│   └── test_login_valid.py
-├── conftest.py
-├── requirements.txt
+│   └── credentials.ts
+├── pages/           # Page Object Model - page logic
+│   ├── MainPage.ts
+│   ├── LoginPage.ts
+│   └── SecurePage.ts
+├── tests/           # Test specifications
+│   ├── main-page.spec.ts
+│   ├── login-invalid-credentials.spec.ts
+│   └── login-valid.spec.ts
+├── playwright.config.ts
+├── package.json
 └── README.md
 ```
 

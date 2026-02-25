@@ -1,0 +1,39 @@
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { SecurePage } from '../pages/SecurePage';
+import { credentials } from '../config/credentials';
+
+test.describe('Scenario 3 - Login to the site', () => {
+  let loginPage: LoginPage;
+  let securePage: SecurePage;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    securePage = new SecurePage(page);
+    await loginPage.goto();
+  });
+
+  test('Login with valid credentials - full flow', async ({ page }) => {
+    if (!credentials.username || !credentials.password) {
+      throw new Error('LOGIN_USERNAME and LOGIN_PASSWORD must be set in .env');
+    }
+    await loginPage.login(credentials.username, credentials.password);
+
+    await expect(page).toHaveURL(/\/secure/);
+
+    const title = await securePage.getTitle();
+    expect(title).toBeTruthy();
+    expect(title.length).toBeGreaterThan(0);
+
+    const content = await securePage.getPageContent();
+    expect(content).toContain('Secure Area');
+    expect(content).toContain('Welcome to the Secure Area');
+
+    await expect(securePage.getLogoutButton()).toBeVisible();
+
+    await securePage.getLogoutButton().click();
+
+    await expect(page).toHaveURL(/\/login/);
+    await expect(loginPage.getFlashMessage()).toContainText(/logout|logged out/i);
+  });
+});
